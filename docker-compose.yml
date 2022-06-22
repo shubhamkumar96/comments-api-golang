@@ -10,6 +10,7 @@ services:
       - POSTGRES_BD=postgres
       - POSTGRES_USER=postgres
       - POSRGRES_PASSWORD=postgres
+      - POSTGRES_HOST_AUTH_METHOD=trust
     networks:
       - fullstack
     volumes:
@@ -39,6 +40,3 @@ volumes:
 networks:
   fullstack:
     driver: bridge
-
-
-
