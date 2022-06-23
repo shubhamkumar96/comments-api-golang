@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"github.com/shubhamkumar96/comments-api-golang/internal/db"
 )
@@ -16,9 +15,11 @@ func Run() error {
 		fmt.Println("Failed to Connect to the Database")
 		return err
 	}
-	if err := db.Ping(context.Background()); err != nil {
+	if err := db.MigrateDB(); err != nil {
+		fmt.Println("Failed to Migrate Database")
 		return err
 	}
+
 	fmt.Println("Successfully Connected and Pinged Database")
 
 	return nil
