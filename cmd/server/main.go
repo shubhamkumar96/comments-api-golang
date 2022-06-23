@@ -1,7 +1,10 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"github.com/google/uuid"
+	"github.com/shubhamkumar96/comments-api-golang/internal/comment"
 	"github.com/shubhamkumar96/comments-api-golang/internal/db"
 )
 
@@ -21,6 +24,22 @@ func Run() error {
 	}
 
 	fmt.Println("Successfully Connected and Pinged Database")
+
+	id := uuid.New().String()
+
+	fmt.Println(id)
+
+	cmtService := comment.NewService(db)
+	cmtService.PostComment(context.Background(),
+		comment.Comment{
+			ID:     id,
+			Slug:   "Manual-test",
+			Author: "Tester",
+			Body:   "Testing",
+		})
+
+	fmt.Println(id)
+	fmt.Println(cmtService.GetComment(context.Background(), id))
 
 	return nil
 }
