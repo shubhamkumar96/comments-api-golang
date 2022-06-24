@@ -1,9 +1,14 @@
 package http
 
 import (
+	"context"
 	"fmt"
 	"github.com/gorilla/mux"
+	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"time"
 )
 
 type CommentService interface {
@@ -38,8 +43,26 @@ func (h *Handler) mapRoutes() {
 }
 
 func (h *Handler) Serve() error {
-	if err := h.Server.ListenAndServe(); err != nil {
-		return err
+	go func() {
+		if err := h.Server.ListenAndServe(); err != nil {
+			log.Println(err.Error())
+		}
+	}()
+
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+	<-c
+
+	log.Println("HERE-2")
+
+	//	Create a deadline to wait for
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	if err := h.Server.Shutdown(ctx); err != nil {
+		log.Fatalf("Server Shutdown Failed: %+v", err)
 	}
+
+	log.Println("Shut Down Gracefully")
+
 	return nil
 }
