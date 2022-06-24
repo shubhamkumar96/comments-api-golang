@@ -1,11 +1,10 @@
 package main
 
 import (
-	"context"
 	"fmt"
-	"github.com/google/uuid"
 	"github.com/shubhamkumar96/comments-api-golang/internal/comment"
 	"github.com/shubhamkumar96/comments-api-golang/internal/db"
+	transportHttp "github.com/shubhamkumar96/comments-api-golang/internal/transport/http"
 )
 
 //	Run - is going to be responsible for the instantiation and start
@@ -25,21 +24,11 @@ func Run() error {
 
 	fmt.Println("Successfully Connected and Pinged Database")
 
-	id := uuid.New().String()
-
-	fmt.Println(id)
-
 	cmtService := comment.NewService(db)
-	cmtService.PostComment(context.Background(),
-		comment.Comment{
-			ID:     id,
-			Slug:   "Manual-test",
-			Author: "Tester",
-			Body:   "Testing",
-		})
-
-	fmt.Println(id)
-	fmt.Println(cmtService.GetComment(context.Background(), id))
+	httpHandler := transportHttp.NewHandler(cmtService)
+	if err := httpHandler.Serve(); err != nil {
+		return err
+	}
 
 	return nil
 }
