@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"github.com/google/uuid"
 	"github.com/shubhamkumar96/comments-api-golang/internal/comment"
 )
 
@@ -34,7 +35,7 @@ func (d *Database) GetComment(ctx context.Context, uuid string) (comment.Comment
 }
 
 func (d *Database) PostComment(ctx context.Context, cmt comment.Comment) (comment.Comment, error) {
-	//cmt.ID = uuid.New().String()
+	cmt.ID = uuid.New().String()
 	postRow := CommentRow{
 		ID:     cmt.ID,
 		Slug:   sql.NullString{String: cmt.Slug, Valid: true},

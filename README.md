@@ -11,3 +11,28 @@
 3. `psql -U postgres`
 4. `\dt`
 5. `\d+ comments`
+
+### Sample Curl CRUD Queries ###
+````
+POST:-
+curl --location --request POST 'http://localhost:8080/api/v1/comment' \
+--header 'Content-Type: application/json' \
+--data-raw '{"slug": "hello", "body": "body", "author": "me"}'
+````
+
+````
+GET:-
+curl --location --request GET 'http://localhost:8080/api/v1/comment/{id}'
+````
+
+````
+PUT:- 
+curl --location --request PUT 'http://localhost:8080/api/v1/comment/{id}' \
+--header 'Content-Type: application/json' \
+--data-raw '{"slug": "hello-update", "body": "body", "author": "me"}'
+````
+
+````
+DELETE:- 
+curl --location --request DELETE 'http://localhost:8080/api/v1/comment/{id}'
+````
